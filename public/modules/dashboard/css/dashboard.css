@@ -1,0 +1,38 @@
+.cal-week {
+	display: block;
+}
+
+.cal-week-detail {
+	display: block;
+}
+
+.cal-day {
+	position: relative;
+	display: inline-block;
+	width: 124px;
+	margin: 0 6px;
+	border-top: 1px solid;
+	height: 8em;
+	overflow: hidden;
+	text-align: center;
+}
+
+.cal-day p {
+	position: absolute;
+	margin: 0;
+	top: 2px;
+	left: 3px;
+}
+
+.cal-day svg {
+	margin: 10px auto 0 auto;
+}
+
+.stats div {
+  font: 10px sans-serif;
+  background-color: steelblue;
+  text-align: right;
+  padding: 3px;
+  margin: 1px;
+  color: white;
+}

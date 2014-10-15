@@ -1,0 +1,13 @@
+<div class="cal" ng-controller="DashboardController">
+	<run-view id="run-view"></run-view>
+	<button ng-click="addWeeks(-2)">^^^</button>
+	<div class="cal-week" ng-repeat="week in weeks">
+		<cal-entry class="cal-day" ng-repeat="day in week.days" ng-click="showRuns(day.runs, week)">
+		</cal-entry>
+		<div class="cal-week-detail" ng-show="weekDetail === week">
+			<run-view></run-view>
+		</div>
+	</div>
+	<button ng-click="addWeeks(2)">More</button>
+</div>
+
