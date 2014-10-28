@@ -35,6 +35,14 @@ module.exports = function(app) {
 	app.route('/auth/twitter').get(passport.authenticate('twitter'));
 	app.route('/auth/twitter/callback').get(users.oauthCallback('twitter'));
 
+	// Setting the mapmyfitness oauth routes
+	app.route('/auth/mapmyfitness').get(passport.authenticate('mapmyfitness'));
+	app.route('/auth/mapmyfitness/callback').get(users.oauthCallback('mapmyfitness'));
+
+	// Setting the runkeeper oauth routes
+	app.route('/auth/runkeeper').get(passport.authenticate('runkeeper'));
+	app.route('/auth/runkeeper/callback').get(users.oauthCallback('runkeeper'));
+
 	// Setting the google oauth routes
 	app.route('/auth/google').get(passport.authenticate('google', {
 		scope: [

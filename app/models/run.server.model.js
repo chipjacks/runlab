@@ -10,16 +10,10 @@ var mongoose = require('mongoose'),
  * Run Schema
  */
 var RunSchema = new Schema({
-	name: {
-		type: String,
-		default: '',
-		required: 'Please fill Run name',
-		trim: true
-	},
-	created: {
-		type: Date,
-		default: Date.now
-	},
+	distance_total: Number,
+	distance_time_series: [],
+	providerName: String,
+	providerId: Number,
 	user: {
 		type: Schema.ObjectId,
 		ref: 'User'

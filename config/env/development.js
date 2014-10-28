@@ -30,6 +30,16 @@ module.exports = {
 		clientSecret: process.env.GITHUB_SECRET || 'APP_SECRET',
 		callbackURL: 'http://localhost:3000/auth/github/callback'
 	},
+	mapmyfitness: {
+		clientID: process.env.MAPMYFITNESS_ID || 'APP_ID',
+		clientSecret: process.env.MAPMYFITNESS_SECRET || 'APP_SECRET',
+		callbackURL: 'http://localhost.mapmyapi.com:3000/auth/mapmyfitness/callback'
+	},
+	runkeeper: {
+		clientID: process.env.RUNKEEPER_ID || 'APP_ID',
+		clientSecret: process.env.RUNKEEPER_SECRET || 'APP_SECRET',
+		callbackURL: 'http://localhost:3000/auth/runkeeper/callback'
+	},
 	mailer: {
 		from: process.env.MAILER_FROM || 'MAILER_FROM',
 		options: {
