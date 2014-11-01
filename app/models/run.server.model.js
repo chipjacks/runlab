@@ -10,9 +10,10 @@ var mongoose = require('mongoose'),
  * Run Schema
  */
 var RunSchema = new Schema({
-	distance_total: Number,
-	distance_time_series: [],
-	providerName: String,
+	distance: Number,
+	time: Number,
+	//distance_time_series: [],
+	provider: String,
 	providerId: Number,
 	user: {
 		type: Schema.ObjectId,

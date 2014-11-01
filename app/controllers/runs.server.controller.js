@@ -6,7 +6,8 @@
 var mongoose = require('mongoose'),
 	errorHandler = require('./errors'),
 	Run = mongoose.model('Run'),
-	_ = require('lodash');
+	_ = require('lodash'),
+	runImport = require('./runs/runs.import');
 
 /**
  * Create a Run
@@ -83,6 +84,16 @@ exports.list = function(req, res) {
 				res.jsonp(runs);
 			}
 		});
+};
+
+exports.syncUserRuns = function(req, res, next) { 
+	var id = req.user._id;
+	_.each(req.user.additionalProvidersData, function(value, key, list) {
+		if (key === 'mapmyfitness') {
+			runImport.importMapMyRuns(req.user, value);
+		}
+	});
+	next();
 };
 
 exports.userList = function(req, res) { 

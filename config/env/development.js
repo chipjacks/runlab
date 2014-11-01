@@ -33,7 +33,7 @@ module.exports = {
 	mapmyfitness: {
 		clientID: process.env.MAPMYFITNESS_ID || 'APP_ID',
 		clientSecret: process.env.MAPMYFITNESS_SECRET || 'APP_SECRET',
-		callbackURL: 'http://localhost.mapmyapi.com:3000/auth/mapmyfitness/callback'
+		callbackURL: 'http://127.0.0.1:3000/auth/mapmyfitness/callback'
 	},
 	runkeeper: {
 		clientID: process.env.RUNKEEPER_ID || 'APP_ID',

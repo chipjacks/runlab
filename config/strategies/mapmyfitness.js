@@ -16,7 +16,6 @@ module.exports = function() {
 			passReqToCallback: true
 		},
 		function(req, accessToken, refreshToken, profile, done) {
-//			debugger;
 			// Set the provider data and include tokens
 			var providerData = profile._json;
 			providerData.accessToken = accessToken;
@@ -39,3 +38,4 @@ module.exports = function() {
 		}
 	));
 };
+

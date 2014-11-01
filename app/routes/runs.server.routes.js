@@ -9,9 +9,8 @@ module.exports = function(app) {
 		.get(runs.list)
 		.post(users.requiresLogin, runs.create);
 
-	// Runs Routes
 	app.route('/users/:userName/runs')
-		.get(runs.userList);
+		.get(runs.syncUserRuns, runs.userList);
 
 	app.route('/runs/:runId')
 		.get(runs.read)
