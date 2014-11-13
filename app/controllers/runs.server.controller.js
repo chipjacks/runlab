@@ -74,11 +74,24 @@ exports.delete = function(req, res) {
  * List of Runs
  */
 exports.list = function(req, res) { 
-	Run.find().sort('-created').populate('user', 'username').exec(
+	var query = {};
+	var startDate = req.query.startDate;
+	var endDate = req.query.endDate;
+	if (startDate) {
+		startDate = new Date(startDate);
+	}
+	if (endDate) {
+		endDate = new Date(endDate);
+	}
+	if (startDate.getTime() && endDate.getTime()) {
+		query = {'started_at': {'$gte': startDate.toISOString(), '$lt': endDate.toISOString()}};
+	}
+	Run.find(query).sort('-started_at').populate('user', 'username').exec(
 		function(err, runs) {
 			if (err) {
 				return res.status(400).send({
-					message: errorHandler.getErrorMessage(err)
+					message: errorHandler.getErrorMessage(err),
+					raw: err
 				});
 			} else {
 				res.jsonp(runs);
@@ -86,6 +99,7 @@ exports.list = function(req, res) {
 		});
 };
 
+// imports any runs created since last sync with provider.
 exports.syncUserRuns = function(req, res, next) { 
 	var id = req.user._id;
 	_.each(req.user.additionalProvidersData, function(value, key, list) {
