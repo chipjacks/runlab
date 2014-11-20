@@ -73,19 +73,22 @@ exports.delete = function(req, res) {
 /**
  * List of Runs
  */
+function parseISODateParam(str) {
+	if (!str) {
+		return null;
+	}
+	var res;
+	var isoDateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,4})?Z$/;
+	return isoDateRegex.exec(str);
+}
+
 exports.list = function(req, res) { 
 	var query = {};
-	var startDate = req.query.startDate;
-	var endDate = req.query.endDate;
-	if (startDate) {
-		startDate = new Date(startDate);
-	}
-	if (endDate) {
-		endDate = new Date(endDate);
-	}
-	if (startDate.getTime() && endDate.getTime()) {
-		query = {'started_at': {'$gte': startDate.toISOString(), '$lt': endDate.toISOString()}};
-	}
+	var startDate = parseISODateParam(req.query.startDate);
+	var endDate = parseISODateParam(req.query.endDate);
+	if (startDate || endDate) query.started_at = {};
+	if (startDate) query.started_at.$gte = startDate;
+	if (endDate) query.started_at.$lt = endDate;
 	Run.find(query).sort('-started_at').populate('user', 'username').exec(
 		function(err, runs) {
 			if (err) {

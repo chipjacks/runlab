@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('dashboard').
-factory('rundata', function RunDataFactory() {
+factory('rundata', ['Runs', function RunDataFactory() {
 	var runs = [
 		{type: 'jog', date: new Date(2014, 9, 18), distance: 6, time: moment.duration(40, 'm')},
 		{type: 'tempo', date: new Date(2014, 9, 18), distance: 6, time: moment.duration(40, 'm')},
@@ -24,12 +24,12 @@ factory('rundata', function RunDataFactory() {
 	}
 
 	function getRunsByDate(date) {
-		var res = [];
-		for (var i = 0; i < runs.length; i++) {
-			if (compareDates(runs[i].date, moment(date))) {
-				res.push(runs[i]);
-			}
-		}
+		var startDate = moment(date);
+		var endDate = moment(date).add(1, 'day');
+		var res = Runs.query(
+				{startDate: startDate.toISOString(),
+					endDate: endDate.toISOString()
+				});
 		return res;
 	}
 
@@ -42,4 +42,5 @@ factory('rundata', function RunDataFactory() {
 		getRunsByDate: getRunsByDate,
 		pace: pace
 	};
-});
+}
+]);

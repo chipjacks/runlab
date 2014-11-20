@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('dashboard').
-controller('DashboardController', ['$scope', '$window', 'rundata', function($scope, $window, rundata) {
+controller('DashboardController', ['$scope', '$window', 'Runs', function($scope, $window, Runs) {
 	var moment = $window.moment;
 	// start with last Monday
-	$scope.startDay = moment().day(-13); // two weeks ago
-	$scope.endDay = moment().day(8); // next Monday
+	$scope.startDay = moment().day(-13).hour(0).minute(0).second(0); // Monday two weeks ago
+	$scope.endDay = moment().day(8).hour(0).minute(0).second(0); // next Monday
 	$scope.weeks = {};
 	function updateData() {
 		for (var i = $scope.startDay.week(); i <= $scope.endDay.week(); i++) {
@@ -18,8 +18,14 @@ controller('DashboardController', ['$scope', '$window', 'rundata', function($sco
 		$scope.weeks[weekNum] = {};
 		$scope.weeks[weekNum].days = getDays(weekNum);
 		for (var j = 0; j < $scope.weeks[weekNum].days.length; j++) {
+			var today = moment($scope.weeks[weekNum].days[j]);
+			var tomorrow = new Date(today.add(1, 'days')).toISOString();
+			today = new Date(today.subtract(1, 'days')).toISOString();
 			$scope.weeks[weekNum].days[j].runs =
-				rundata.getRunsByDate($scope.weeks[weekNum].days[j]);
+				Runs.query({
+					startDate: today,
+					endDate: tomorrow
+				});
 		}
 	}
 	$scope.addWeeks = function(amnt) {
@@ -41,7 +47,7 @@ controller('DashboardController', ['$scope', '$window', 'rundata', function($sco
 	}
 	$scope.sumRuns = function(runs) {
 		return runs.reduce(function(prevVal, curVal, idx, arr) {
-			return prevVal + arr[idx].distance;
+			return prevVal + arr[idx].aggregates.distance_total;
 		}, 0);
 	};
 	$scope.showRuns = function(runs, week) {

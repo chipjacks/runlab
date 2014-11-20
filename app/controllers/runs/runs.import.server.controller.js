@@ -43,16 +43,15 @@ var saveRun = function(user, inRun) {
 			if (err) {
 				console.log('Error finding run.');
 				return;
-			} else if (run) {
-				return;
+			} else {
+				run = new Run(inRun);
+				run.user = user._id;
+				run.save(function (err) {
+					if (err) {
+						console.log(err.message);
+					}
+				});
 			}
-			run = new Run(inRun);
-			run.user = user._id;
-			run.save(function (err) {
-				if (err) {
-					console.log(err.message);
-				}
-			});
 		});
 };
 
@@ -77,9 +76,11 @@ exports.importMapMyRuns = function(user, providerData) {
 	var query = { 
 		'user': providerData.id,
 		'activity_type': '/v7.0/activity_type/16/',
+		'limit': 20,
+		'offset': 0
 	};
  	if (providerData.last_import) {
- 		query.created_after = providerData.last_import;
+ 		query.updated_after = providerData.last_import;
  	}
 	var options = {
 		protocol: 'https:',
@@ -107,6 +108,16 @@ exports.importMapMyRuns = function(user, providerData) {
 			runs = JSON.parse(str);
 			//console.log(str);
 			var run;
+			if (runs.total_count > query.offset + query.limit) {
+				query.offset += 20;
+				options.path = '/v7.0/workout/?' + qs.stringify(query);
+				var req = https.get(options, allRunsCallback);
+				req.on('error', function(e) {
+					console.log('Caught error: ' + e.message);
+				});
+				req.end();
+			}
+
 			_.forEach(runs._embedded.workouts, function (wo) {
 				if (wo.has_time_series) {
 					options.path = '/v7.0/workout/' + wo._links.self[0].id + '/?field_set=time_series';
